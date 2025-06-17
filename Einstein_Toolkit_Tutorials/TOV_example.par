@@ -44,7 +44,8 @@ CoordBase::zmax = 24.0
 # have to be multiples of these. 'dx' is the size of one cell in x-direction.
 # Making this smaller means using higher resolution, because more points will
 # be used to cover the same space.
-CoordBase::dx   =   2.0
+
+CoordBase::dx   =   2.0           ######################################################### These are the resolutions
 CoordBase::dy   =   2.0
 CoordBase::dz   =   2.0
 
@@ -68,7 +69,8 @@ CoordBase::boundary_shiftout_y_upper    = 0
 CoordBase::boundary_shiftout_z_upper    = 0
 
 
-ActiveThorns = "ReflectionSymmetry"
+ActiveThorns = "ReflectionSymmetry"  
+                                 ######### It does the mirror effect for all axes: Means f(x) = f(-x) and the same for y and z 
 
 ReflectionSymmetry::reflection_x = "yes"
 ReflectionSymmetry::reflection_y = "yes"
@@ -109,6 +111,7 @@ Carpet::prolongation_order_space = 3
 Carpet::prolongation_order_time  = 2
 
 # Time integration
+########################### Courant factor == dtfac
 time::dtfac = 0.25
 
 MoL::ODE_Method             = "rk4"
@@ -129,13 +132,13 @@ ActiveThorns = "EOS_Omni GRHydro"
 
 HydroBase::evolution_method      = "GRHydro"
 
-GRHydro::riemann_solver         = "Marquina"
-GRHydro::GRHydro_eos_type       = "Polytype"
+GRHydro::riemann_solver         = "Marquina" ############# Marquina is more accurate Riemann solver because
+GRHydro::GRHydro_eos_type       = "Polytype" ############# For the evolution, we use polytropic equation P= k Rho**gamma
 GRHydro::GRHydro_eos_table      = "2D_Polytrope"
 GRHydro::recon_method           = "ppm"
 GRHydro::GRHydro_stencil        = 3
 GRHydro::bound                  = "none"
-GRHydro::rho_abs_min            = 1.e-10
+GRHydro::rho_abs_min            = 1.e-10     ############# rho can't go less than this value.
 # Parameter controlling finite difference order of the Christoffel symbols in GRHydro
 GRHydro::sources_spatial_order  = 4
 
@@ -151,8 +154,8 @@ ADMBase::dtshift_evolution_method= "ML_BSSN"
 
 ML_BSSN::timelevels = 3
 
-ML_BSSN::harmonicN           = 1      # 1+log
-ML_BSSN::harmonicF           = 2.0    # 1+log
+ML_BSSN::harmonicN           = 1      # 1+log ############     Gauage conditions
+ML_BSSN::harmonicF           = 2.0    # 1+log 
 ML_BSSN::evolveA             = 1
 ML_BSSN::evolveB            = 1
 ML_BSSN::ShiftGammaCoeff     = 0.75
@@ -178,7 +181,7 @@ Dissipation::vars = "
         ML_BSSN::ML_shift
 "
 
-
+####################### initial data: 
 # init parameters
 InitBase::initial_data_setup_method = "init_some_levels"
 
@@ -193,13 +196,14 @@ ADMBase::initial_dtlapse         = "zero"
 ADMBase::initial_dtshift         = "zero"
 
 # Parameters for initial star
-TOVSolver::TOV_Rho_Central[0] = 1.28e-3
-TOVSolver::TOV_Gamma          = 2
-TOVSolver::TOV_K              = 100
+############################################## P = k * rho**gamma
+TOVSolver::TOV_Rho_Central[0] = 1.28e-3   #### rho which is multiplied by e+18 so we can get the central density for a Nutron star.
+TOVSolver::TOV_Gamma          = 2            #***** , To be safe, change all of them.
+TOVSolver::TOV_K              = 100          #*****
 
-# Set equation of state for evolution
-EOS_Omni::poly_gamma                   = 2
-EOS_Omni::poly_k                       = 100
+# Set equation of state for evolution      
+EOS_Omni::poly_gamma                   = 2   #*****
+EOS_Omni::poly_k                       = 100 #*****
 EOS_Omni::gl_gamma                     = 2
 EOS_Omni::gl_k                         = 100
 
